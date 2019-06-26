@@ -79,6 +79,7 @@ PODS:
   - nanopb/encode (0.3.901)
   - PryntTrimmerView (3.0.0)
   - SteviaLayout (4.4.4)
+  - TLPhotoPicker (1.8.9)
   - YPImagePicker (4.0.0):
     - PryntTrimmerView (~> 3.0.0)
     - SteviaLayout (~> 4.4.1)
@@ -89,6 +90,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
+  - TLPhotoPicker
   - YPImagePicker
 
 SPEC REPOS:
@@ -108,6 +110,7 @@ SPEC REPOS:
     - nanopb
     - PryntTrimmerView
     - SteviaLayout
+    - TLPhotoPicker
     - YPImagePicker
 
 SPEC CHECKSUMS:
@@ -126,8 +129,9 @@ SPEC CHECKSUMS:
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   PryntTrimmerView: 53ac64053c7ce63cb3e27f54090f52da0734891d
   SteviaLayout: 523469269059f2c6da02820bb2ff28a5fe0780aa
+  TLPhotoPicker: 9bf255c116129bc5d709b4cc8b42b3542e89e841
   YPImagePicker: 8039f89ad79281545fa868486f32d9bf5d65ede1
 
-PODFILE CHECKSUM: 3e2d72c3a6cc2e200428a94bdb27d002f75719c7
+PODFILE CHECKSUM: 650b0f5125e1bf5c2c2f6d37f926a4d29397d374
 
 COCOAPODS: 1.7.0
