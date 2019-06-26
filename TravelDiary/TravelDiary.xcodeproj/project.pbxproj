@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		611C832F22C3450200CC6689 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 611C832E22C3450200CC6689 /* GoogleService-Info.plist */; };
+		611C833622C387E000CC6689 /* ImageSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611C833422C387DF00CC6689 /* ImageSlide.swift */; };
 		79871F1C403DA827EC42C76D /* Pods_TravelDiary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCB818DF83FB67B7EEC8D9B8 /* Pods_TravelDiary.framework */; };
 		F300FB7022C1C00100EDA9B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F300FB6F22C1C00100EDA9B0 /* AppDelegate.swift */; };
 		F300FB7222C1C00100EDA9B0 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F300FB7122C1C00100EDA9B0 /* MainViewController.swift */; };
@@ -26,6 +27,7 @@
 /* Begin PBXFileReference section */
 		52F8AEE44277C44DE7BD773B /* Pods-TravelDiary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelDiary.debug.xcconfig"; path = "Target Support Files/Pods-TravelDiary/Pods-TravelDiary.debug.xcconfig"; sourceTree = "<group>"; };
 		611C832E22C3450200CC6689 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		611C833422C387DF00CC6689 /* ImageSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSlide.swift; sourceTree = "<group>"; };
 		E80E526080885E81C06108D9 /* Pods-TravelDiary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelDiary.release.xcconfig"; path = "Target Support Files/Pods-TravelDiary/Pods-TravelDiary.release.xcconfig"; sourceTree = "<group>"; };
 		F300FB6C22C1C00100EDA9B0 /* TravelDiary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelDiary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F300FB6F22C1C00100EDA9B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				F300FB8922C1CEEA00EDA9B0 /* MainCollectionViewCell.swift */,
 				F3C366A422C3640C00117B11 /* MyLogCollectionViewCell.swift */,
 				F3C366A022C342A300117B11 /* CustomTapBarController.swift */,
+				611C833422C387DF00CC6689 /* ImageSlide.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 				F300FB8622C1C0ED00EDA9B0 /* DataClass.swift in Sources */,
 				F3C366A122C342A300117B11 /* CustomTapBarController.swift in Sources */,
 				F300FB7022C1C00100EDA9B0 /* AppDelegate.swift in Sources */,
+				611C833622C387E000CC6689 /* ImageSlide.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
