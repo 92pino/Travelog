@@ -7,11 +7,10 @@
 //
 
 import UIKit
-import Firebase
+import YPImagePicker
 import Photos
-import TLPhotoPicker
 
-class WriteViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, TLPhotosPickerViewControllerDelegate, UIScrollViewDelegate {
+class WriteViewController: UIViewController {
     
     private let topNavigationView = UIView()
     private let backButton = UIButton()
@@ -20,121 +19,27 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
     private let textView = UITextView()
     private let textViewLabel = UILabel()
     let selectedImageView = UIImageView()
-    
-    private var imageScrollView = UIScrollView()
-//    private
-    private var pageControl = UIPageControl()
-    var slides = [ImageSlide]()
-    
-    var selectedPictures = [TLPHAsset]()
-    var imageURLSforUpload = [String]()
-    var uploadCount = 0
-    var selectedImageCount = 0
-    
-    var previousHeight : CGFloat = 25.0
-    var kKeyboardSize : CGFloat = 0.0
-    var keyboardVisible = false
-    
-    // MARK: - imageSlide
-    func createSlides(_ images: [TLPHAsset]) -> [ImageSlide] {
-        var slides = [ImageSlide]()
-        for i in images {
-            let slide = ImageSlide()
-            print("### :", i.fullResolutionImage!)
-//            slide.imageView.image = i.fullResolutionImage
-            slides.append(slide)
-        }
-        
-        return slides
-    }
-    
-    func setupScrollView(_ imageSlides: [ImageSlide]) {
-        imageScrollView.contentSize = CGSize(width: imageScrollView.frame.width * CGFloat(imageSlides.count), height: imageScrollView.frame.height)
-        imageScrollView.isPagingEnabled = true
-        
-        for i in 0 ..< imageSlides.count {
-            imageSlides[i].frame = CGRect(x: imageScrollView.frame.width * CGFloat(i), y: 0, width: view.frame.width, height: imageScrollView.frame.height)
-            imageSlides[0].backgroundColor = .blue
-            imageScrollView.addSubview(imageSlides[i])
-        }
-        
-        pageControl.numberOfPages = imageSlides.count
-        pageControl.currentPage = 0
-        pageControl.currentPageIndicatorTintColor = .black
-        pageControl.pageIndicatorTintColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
-        self.view.bringSubviewToFront(pageControl)
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let pageIndex = round(imageScrollView.contentOffset.x/view.frame.width)
-        pageControl.currentPage = Int(pageIndex)
-    }
-    
-    // TLPhotos delegate functions
-    func dismissPhotoPicker(withTLPHAssets: [TLPHAsset]) {
-        
-        // MARK - TODO: What if no image selected or asset not recognized? handle here.
-        
-        // use selected order, fullresolution image
-        self.selectedPictures = withTLPHAssets
-        
-        let slides = createSlides(selectedPictures)
-        setupScrollView(slides)
-        
-        self.selectedImageCount = self.selectedPictures.count
-    }
-    
-    //
+    var subject: String?
+    var selectedItems = [YPMediaItem]()
+    lazy var dao = MemoDAO()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configureViews()
+        configureCustomKeyboard()
         configureConstraints()
         configureNotificationForKeyboard()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
-        
-        switch photoAuthorizationStatus {
-            
-        case .authorized: print("Access is granted by user")
-            
-        case .notDetermined:
-            
-            PHPhotoLibrary.requestAuthorization({ (newStatus) in
-                print("status is \(newStatus)")
-                if newStatus == PHAuthorizationStatus.authorized {print("success")
-                    
-                } })
-        case .restricted:
-            print("User do not have access to photo album.")
-            
-        case .denied:
-            print("User has denied the permission.")
-            
-        }
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name:
-            UIResponder.keyboardWillShowNotification, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-    }
-    
     private func configureViews() {
-        let toolBarKeyboard = UIToolbar()
-        toolBarKeyboard.sizeToFit()
-        let buttonflexBar = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let buttonDoneBar = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.doneButtonClicked(_sender:)))
-        toolBarKeyboard.items = [buttonflexBar, buttonDoneBar]
-        toolBarKeyboard.tintColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
-        
         view.backgroundColor = .white
         topNavigationView.backgroundColor = .white
         selectedImageView.contentMode = .scaleAspectFit
         selectedImageView.image = UIImage(named: "IU")
+        let imageTapGesture = UITapGestureRecognizer(target: self, action: #selector(imageViewDidTap(_:)))
+        selectedImageView.isUserInteractionEnabled = true
+        selectedImageView.addGestureRecognizer(imageTapGesture)
         
         backButton.setImage(UIImage(named: "back"), for: .normal)
         backButton.addTarget(self, action: #selector(backButtonDidTap(_:)), for: .touchUpInside)
@@ -148,7 +53,6 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
         textView.layer.borderWidth = 1
         textView.layer.borderColor = #colorLiteral(red: 0.5004553199, green: 0.6069974899, blue: 1, alpha: 1)
         textView.clipsToBounds = true
-        textView.inputAccessoryView = toolBarKeyboard
         
         configureTextViewLabel()
         
@@ -156,19 +60,20 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
         topNavigationView.addSubview(backButton)
         topNavigationView.addSubview(saveButton)
         view.addSubview(scrollView)
-        imageScrollView.backgroundColor = .red
-        scrollView.addSubview(imageScrollView)
-        imageScrollView.addSubview(pageControl)
+        scrollView.addSubview(selectedImageView)
         scrollView.addSubview(textView)
         textView.addSubview(textViewLabel)
-        
-        imageTapEvent()
     }
     
-    private func imageTapEvent() {
-        let addImageGesture = UITapGestureRecognizer(target: self, action: #selector(selectImage(_:)))
-        addImageGesture.numberOfTapsRequired = 1
-        imageScrollView.addGestureRecognizer(addImageGesture)
+    private func configureCustomKeyboard() {
+        let toolBarKeyboard = UIToolbar()
+        toolBarKeyboard.sizeToFit()
+        let buttonflexBar = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let buttonDoneBar = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.doneButtonClicked(_sender:)))
+        toolBarKeyboard.items = [buttonflexBar, buttonDoneBar]
+        toolBarKeyboard.tintColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+        textView.inputAccessoryView = toolBarKeyboard
+        textView.keyboardAppearance = UIKeyboardAppearance.dark
     }
     
     private func configureTextViewLabel() {
@@ -209,20 +114,15 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        imageScrollView.translatesAutoresizingMaskIntoConstraints = false
-        imageScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        imageScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        imageScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        imageScrollView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.45).isActive = true
-        
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.bottomAnchor.constraint(equalTo: imageScrollView.bottomAnchor, constant: -10).isActive = true
-        pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        pageControl.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        selectedImageView.translatesAutoresizingMaskIntoConstraints = false
+        selectedImageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        selectedImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        selectedImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        selectedImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.45).isActive = true
         
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.topAnchor.constraint(equalTo: imageScrollView.bottomAnchor, constant: 10).isActive = true
-        textView.centerXAnchor.constraint(equalTo: imageScrollView.centerXAnchor).isActive = true
+        textView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 10).isActive = true
+        textView.centerXAnchor.constraint(equalTo: selectedImageView.centerXAnchor).isActive = true
         textView.widthAnchor.constraint(equalToConstant: 350).isActive = true
         textView.heightAnchor.constraint(equalToConstant: 600).isActive = true
         textView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10).isActive = true
@@ -231,7 +131,6 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
         textViewLabel.topAnchor.constraint(equalTo: textView.topAnchor, constant: 10).isActive = true
         textViewLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         textViewLabel.heightAnchor.constraint(equalToConstant: 23).isActive = true
-        
     }
     
     private func textViewLabelShow() {
@@ -242,12 +141,51 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
         }
     }
     
+    private func saveUserInputData() {
+        print("save")
+        
+        guard self.textView.text?.isEmpty == false else {
+            let alert = UIAlertController(title: "내용을 입력해주세요", message: "내용을 입력하지 않으면 저장이 되지 않습니다.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            
+            return
+        }
+        
+        // MemoData 객체를 생성, 데이터를 담는다
+        let data = MemoData()
+        
+        data.title = self.subject
+        data.contents = self.textView.text
+        data.image = self.selectedImageView.image
+        data.registerDate = Date()
+        
+        self.dao.insert(data)
+    }
+    
+    @objc private func imageViewDidTap(_ sender: UIImageView) {
+        var config = YPImagePickerConfiguration()
+        config.startOnScreen = .library
+        config.screens = [.library, .photo]
+        config.showsCrop = .rectangle(ratio: 16/15)
+        config.wordings.libraryTitle = "Travel Log"
+        config.library.maxNumberOfItems = 5
+        let picker = YPImagePicker(configuration: config)
+        picker.didFinishPicking { [unowned picker] items, _ in
+            
+            self.selectedItems = items
+            self.selectedImageView.image = items.singlePhoto?.image
+            picker.dismiss(animated: false)
+        }
+        present(picker, animated: false)
+    }
+    
     @objc private func backButtonDidTap(_ sender: UIButton) {
         dismiss(animated: true)
     }
     
     @objc private func saveButtonDidTap(_ sender: UIButton) {
-        
+        saveUserInputData()
     }
     
     @objc private func doneButtonClicked (_sender: Any) {
@@ -262,46 +200,16 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
     @objc private func keyboardWillHide(_ sender: Notification) {
         self.view.frame.origin.y = 0
     }
-    
-    @objc func keyboardWillShow(notification:Notification) {
-        if !keyboardVisible && ( self.view.traitCollection.horizontalSizeClass != UIUserInterfaceSizeClass.regular ) {
-            let userInfo = notification.userInfo!
-            let keyboardSize = userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect
-            if self.view.frame.origin.y == previousHeight {
-                kKeyboardSize = keyboardSize!.height
-                self.view.frame.origin.y -= (keyboardSize!.height/2.0)
-            }
-        }
-        
-        keyboardVisible = true
-    }
-    
-    @objc
-    func keyboardWillHide(notification:Notification) {
-        if keyboardVisible && ( self.view.traitCollection.horizontalSizeClass != UIUserInterfaceSizeClass.regular ) {
-            if self.view.frame.origin.y != previousHeight {
-                self.view.frame.origin.y = previousHeight
-            }
-        }
-        keyboardVisible = false
-    }
-    
-    @objc func selectImage(_ sender: UITapGestureRecognizer) {
-        let viewController = TLPhotosPickerViewController()
-        viewController.delegate = self
-        var configure = TLPhotosPickerConfigure()
-        configure.allowedVideo = false
-        configure.allowedVideoRecording = false
-        configure.muteAudio = true
-        self.present(viewController, animated: true, completion: nil)
-        
-    }
-
-    
 
 }
 
 extension WriteViewController: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let contents = textView.text as NSString
+        let length = ((contents.length > 10) ? 10 : contents.length)
+        self.subject = contents.substring(with: NSRange(location: 0, length: length))
+    }
     
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         textView.resignFirstResponder()
