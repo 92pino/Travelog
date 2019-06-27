@@ -24,6 +24,47 @@ class WriteViewController: UIViewController {
     private let textView = UITextView()
     private let textViewLabel = UILabel()
     let selectedImageView = UIImageView()
+    
+    let dateView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    let firstDateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "시작날짜 : "
+        
+        return label
+    }()
+    
+    let firstDateTF: UITextField = {
+        let textField = UITextField()
+        
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.placeholder = "여행 시작날짜를 선택해주세요"
+        
+        return textField
+    }()
+    
+    let lastDateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "종료날짜 : "
+        
+        return label
+    }()
+    
+    let lastDateTF: UITextField = {
+        let textField = UITextField()
+        
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.placeholder = "여행 종료날짜를 선택해주세요"
+        
+        return textField
+    }()
   
     var subject: String?
     var selectedItems = [YPMediaItem]()
@@ -70,6 +111,12 @@ class WriteViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(selectedImageView)
         scrollView.addSubview(textView)
+        scrollView.addSubview(dateView)
+        dateView.addSubview(firstDateLabel)
+        dateView.addSubview(firstDateTF)
+        dateView.addSubview(lastDateLabel)
+        dateView.addSubview(lastDateTF)
+
         textView.addSubview(textViewLabel)
     }
     
@@ -188,8 +235,8 @@ class WriteViewController: UIViewController {
         selectedImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.45).isActive = true
         
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 10).isActive = true
-        textView.centerXAnchor.constraint(equalTo: selectedImageView.centerXAnchor).isActive = true
+        textView.topAnchor.constraint(equalTo: dateView.bottomAnchor, constant: 10).isActive = true
+        textView.centerXAnchor.constraint(equalTo: dateView.centerXAnchor).isActive = true
         textView.widthAnchor.constraint(equalToConstant: 350).isActive = true
         textView.heightAnchor.constraint(equalToConstant: 600).isActive = true
         textView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10).isActive = true
@@ -198,6 +245,19 @@ class WriteViewController: UIViewController {
         textViewLabel.topAnchor.constraint(equalTo: textView.topAnchor, constant: 10).isActive = true
         textViewLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         textViewLabel.heightAnchor.constraint(equalToConstant: 23).isActive = true
+        
+        dateView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 10).isActive = true
+        dateView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        dateView.widthAnchor.constraint(equalToConstant: 350).isActive = true
+        dateView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        firstDateLabel.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
+        firstDateLabel.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
+        firstDateTF.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
+        firstDateTF.leadingAnchor.constraint(equalTo: firstDateLabel.trailingAnchor, constant: 10).isActive = true
+        lastDateLabel.topAnchor.constraint(equalTo: firstDateLabel.bottomAnchor, constant: 10).isActive = true
+        lastDateLabel.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
+        lastDateTF.topAnchor.constraint(equalTo: firstDateTF.bottomAnchor, constant: 10).isActive = true
+        lastDateTF.leadingAnchor.constraint(equalTo: lastDateLabel.trailingAnchor, constant: 10).isActive = true
     }
     
     private func textViewLabelShow() {
@@ -211,7 +271,10 @@ class WriteViewController: UIViewController {
     private func saveUserInputData() {
         print("save")
         
-        guard self.textView.text?.isEmpty == false else {
+        guard
+            self.textView.text?.isEmpty == false &&
+            self.firstDateTF.text?.isEmpty == false &&
+            self.lastDateTF.text?.isEmpty == false else {
             let alert = UIAlertController(title: "내용을 입력해주세요", message: "내용을 입력하지 않으면 저장이 되지 않습니다.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true)
