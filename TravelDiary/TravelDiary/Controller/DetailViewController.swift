@@ -22,8 +22,13 @@ class DetailViewController: UIViewController {
     private let topNavigationView = UIView()
     private let backButton = UIButton()
     private let trashButton = UIButton()
-    private let sDateLabel = UILabel()
-    private let eDateLabel = UILabel()
+    private let dateView = UIView()
+    private let firstDateLabel = UILabel()
+    private let fromLabel = UILabel()
+    private let lastDateLabel = UILabel()
+    private let toLabel = UILabel()
+    private let locationTitle = UILabel()
+    private let location = UILabel()
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     lazy var dao = MemoDAO()
@@ -68,6 +73,15 @@ class DetailViewController: UIViewController {
         registerDateLabel.font = UIFont.systemFont(ofSize: 20, weight: .light)
         registerDateLabel.textColor = #colorLiteral(red: 0.2683359385, green: 0.3678353727, blue: 0.7584179044, alpha: 1)
         
+        toLabel.text = "여행시작 :"
+        toLabel.textColor = #colorLiteral(red: 0.2683359385, green: 0.3678353727, blue: 0.7584179044, alpha: 1)
+        fromLabel.text = "여행끝 :"
+        fromLabel.textColor = #colorLiteral(red: 0.2683359385, green: 0.3678353727, blue: 0.7584179044, alpha: 1)
+        locationTitle.text = "여행지 :"
+        locationTitle.textColor = #colorLiteral(red: 0.2683359385, green: 0.3678353727, blue: 0.7584179044, alpha: 1)
+        location.text = ""
+        location.textColor = #colorLiteral(red: 0.2683359385, green: 0.3678353727, blue: 0.7584179044, alpha: 1)
+        
         selectedImageView.contentMode = .scaleAspectFit
         selectedImageView.layer.cornerRadius = 20
         selectedImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -75,8 +89,13 @@ class DetailViewController: UIViewController {
         view.addSubview(topNavigationView)
         topNavigationView.addSubview(backButton)
         topNavigationView.addSubview(trashButton)
-        view.addSubview(sDateLabel)
-        view.addSubview(eDateLabel)
+        view.addSubview(dateView)
+        dateView.addSubview(firstDateLabel)
+        dateView.addSubview(lastDateLabel)
+        dateView.addSubview(fromLabel)
+        dateView.addSubview(toLabel)
+        dateView.addSubview(locationTitle)
+        dateView.addSubview(location)
         view.addSubview(selectedImageView)
         view.addSubview(contents)
         view.addSubview(registerDateLabel)
@@ -111,18 +130,44 @@ class DetailViewController: UIViewController {
         selectedImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         selectedImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.45).isActive = true
         
-        registerDateLabel.translatesAutoresizingMaskIntoConstraints = false
-        registerDateLabel.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 10).isActive = true
-        registerDateLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 20).isActive = true
-        registerDateLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -20).isActive = true
-        registerDateLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+//        registerDateLabel.translatesAutoresizingMaskIntoConstraints = false
+//        registerDateLabel.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 10).isActive = true
+//        registerDateLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 20).isActive = true
+//        registerDateLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -20).isActive = true
+//        registerDateLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
         contents.translatesAutoresizingMaskIntoConstraints = false
-        contents.topAnchor.constraint(equalTo: registerDateLabel.bottomAnchor, constant: 10).isActive = true
+        contents.topAnchor.constraint(equalTo: dateView.bottomAnchor, constant: 10).isActive = true
         contents.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 20).isActive = true
         contents.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -20).isActive = true
         contents.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -20).isActive = true
         
+        dateView.translatesAutoresizingMaskIntoConstraints = false
+        dateView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 10).isActive = true
+        dateView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        dateView.widthAnchor.constraint(equalToConstant: 350).isActive = true
+        dateView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        fromLabel.translatesAutoresizingMaskIntoConstraints = false
+        fromLabel.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
+        fromLabel.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
+        
+        firstDateLabel.translatesAutoresizingMaskIntoConstraints = false
+        firstDateLabel.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
+        firstDateLabel.leadingAnchor.constraint(equalTo: fromLabel.trailingAnchor, constant: 10).isActive = true
+        
+        toLabel.translatesAutoresizingMaskIntoConstraints = false
+        toLabel.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
+        toLabel.leadingAnchor.constraint(equalTo: firstDateLabel.trailingAnchor, constant: 15).isActive = true
+        
+        lastDateLabel.translatesAutoresizingMaskIntoConstraints = false
+        lastDateLabel.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
+        lastDateLabel.leadingAnchor.constraint(equalTo: toLabel.trailingAnchor, constant: 10).isActive = true
+        
+        locationTitle.bottomAnchor.constraint(equalTo: dateView.bottomAnchor).isActive = true
+        locationTitle.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
+        location.bottomAnchor.constraint(equalTo: dateView.bottomAnchor).isActive = true
+        location.leadingAnchor.constraint(equalTo: locationTitle.trailingAnchor, constant: 10).isActive = true
     }
     
     // MARK: - Action method
@@ -136,8 +181,16 @@ class DetailViewController: UIViewController {
         formatter.dateFormat = "dd일 HH:mm분에 작성됨"
         let dateString = formatter.string(from: (savedData?.registerDate)!)
         
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateStyle = .medium
+        dateFormatter1.timeStyle = .none
+        let startDate = dateFormatter1.string(from: (savedData?.sDate)!)
+        let lastDate = dateFormatter1.string(from: (savedData?.eDate)!)
+        
         // 레이블에 날짜 표시
         self.registerDateLabel.text = dateString
+        self.firstDateLabel.text = startDate
+        self.lastDateLabel.text = lastDate
     }
     
     @objc private func doneButtonClicked (_sender: Any) {
