@@ -12,6 +12,11 @@ import Photos
 
 class WriteViewController: UIViewController {
     
+    var datePicker : UIDatePicker!
+    
+    var sDate = Date()
+    var eDate = Date()
+    
     private let topNavigationView = UIView()
     private let backButton = UIButton()
     private let saveButton = UIButton()
@@ -19,6 +24,7 @@ class WriteViewController: UIViewController {
     private let textView = UITextView()
     private let textViewLabel = UILabel()
     let selectedImageView = UIImageView()
+  
     var subject: String?
     var selectedItems = [YPMediaItem]()
     lazy var dao = MemoDAO()
@@ -47,6 +53,8 @@ class WriteViewController: UIViewController {
         saveButton.setImage(UIImage(named: "save"), for: .normal)
         saveButton.addTarget(self, action: #selector(saveButtonDidTap(_:)), for: .touchUpInside)
         
+        firstDateTF.delegate = self
+        lastDateTF.delegate = self
         textView.delegate = self
         textView.font = UIFont.italicSystemFont(ofSize: 20)
         textView.layer.cornerRadius = 10
@@ -82,6 +90,65 @@ class WriteViewController: UIViewController {
         textViewLabel.textColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
         textViewLabel.textAlignment = .center
         textViewLabel.isHidden = false
+    }
+    
+    func pickUpDate(_ textField : UITextField){
+        
+        // DatePicker
+        self.datePicker = UIDatePicker(frame:CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 216))
+        self.datePicker.backgroundColor = UIColor.white
+        self.datePicker.datePickerMode = .date
+        textField.inputView = self.datePicker
+        
+        // ToolBar
+        let toolBar = UIToolbar()
+        toolBar.barStyle = .default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor(red: 92/255, green: 216/255, blue: 255/255, alpha: 1)
+        toolBar.sizeToFit()
+        
+        // Adding Button ToolBar
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneClick))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelClick))
+        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        textField.inputAccessoryView = toolBar
+        
+    }
+    
+    @objc func doneClick() {
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateStyle = .medium
+        dateFormatter1.timeStyle = .none
+        if firstDateTF.isEditing {
+            sDate = datePicker.date
+            firstDateTF.text = dateFormatter1.string(from: datePicker.date)
+            firstDateTF.resignFirstResponder()
+            
+            let startDate = sDate
+            let endDate = eDate
+            let diffDate = endDate.timeIntervalSince(startDate)
+            let days = Int(diffDate / 86400)
+            print("\(days)일만큼 차이납니다.")
+        } else {
+            eDate = datePicker.date
+            lastDateTF.text = dateFormatter1.string(from: datePicker.date)
+            lastDateTF.resignFirstResponder()
+            
+            let startDate = sDate
+            let endDate = eDate
+            let diffDate = endDate.timeIntervalSince(startDate)
+            let days = Int(diffDate / 86400)
+            print("\(days)일만큼 차이납니다.")
+        }
+    }
+    @objc func cancelClick() {
+        if firstDateTF.isEditing {
+            firstDateTF.resignFirstResponder()
+        } else {
+            lastDateTF.resignFirstResponder()
+        }
     }
     
     private func configureNotificationForKeyboard() {
@@ -216,5 +283,15 @@ extension WriteViewController: UITextViewDelegate {
         textViewLabelShow()
         
         return true
+    }
+}
+
+extension WriteViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if firstDateTF.isEditing {
+            self.pickUpDate(self.firstDateTF)
+        } else {
+            self.pickUpDate(self.lastDateTF)
+        }
     }
 }
