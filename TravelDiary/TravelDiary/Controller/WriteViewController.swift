@@ -17,6 +17,9 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
     
     var datePicker : UIDatePicker!
     
+    var sDate = Date()
+    var eDate = Date()
+    
     private let topNavigationView = UIView()
     private let backButton = UIButton()
     private let saveButton = UIButton()
@@ -264,11 +267,25 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
         dateFormatter1.dateStyle = .medium
         dateFormatter1.timeStyle = .none
         if firstDateTF.isEditing {
+            sDate = datePicker.date
             firstDateTF.text = dateFormatter1.string(from: datePicker.date)
             firstDateTF.resignFirstResponder()
+            
+            let startDate = sDate
+            let endDate = eDate
+            let diffDate = endDate.timeIntervalSince(startDate)
+            let days = Int(diffDate / 86400)
+            print("\(days)일만큼 차이납니다.")
         } else {
+            eDate = datePicker.date
             lastDateTF.text = dateFormatter1.string(from: datePicker.date)
             lastDateTF.resignFirstResponder()
+            
+            let startDate = sDate
+            let endDate = eDate
+            let diffDate = endDate.timeIntervalSince(startDate)
+            let days = Int(diffDate / 86400)
+            print("\(days)일만큼 차이납니다.")
         }
     }
     @objc func cancelClick() {
