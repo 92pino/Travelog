@@ -289,6 +289,8 @@ class WriteViewController: UIViewController {
         data.contents = self.textView.text
         data.image = self.selectedImageView.image
         data.registerDate = Date()
+        data.sDate = sDate
+        data.eDate = eDate
         
         self.dao.insert(data)
     }
@@ -297,7 +299,7 @@ class WriteViewController: UIViewController {
         var config = YPImagePickerConfiguration()
         config.startOnScreen = .library
         config.screens = [.library, .photo]
-        config.showsCrop = .rectangle(ratio: 16/15)
+//        config.showsCrop = .rectangle(ratio: 16/15)
         config.wordings.libraryTitle = "Travel Log"
         config.library.maxNumberOfItems = 5
         let picker = YPImagePicker(configuration: config)
