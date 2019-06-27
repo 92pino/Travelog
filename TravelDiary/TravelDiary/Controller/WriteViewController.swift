@@ -8,10 +8,14 @@
 
 import UIKit
 import Firebase
+import FirebaseDatabase
+import FirebaseAuth
 import Photos
 import TLPhotoPicker
 
 class WriteViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, TLPhotosPickerViewControllerDelegate, UIScrollViewDelegate {
+    
+    var datePicker : UIDatePicker!
     
     private let topNavigationView = UIView()
     private let backButton = UIButton()
@@ -34,6 +38,49 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
     var previousHeight : CGFloat = 25.0
     var kKeyboardSize : CGFloat = 0.0
     var keyboardVisible = false
+    
+    var ref: DatabaseReference!
+    
+    let dateView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    let firstDateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "시작날짜 : "
+        
+        return label
+    }()
+    
+    let firstDateTF: UITextField = {
+        let textField = UITextField()
+        
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.placeholder = "여행 시작날짜를 선택해주세요"
+        
+        return textField
+    }()
+    
+    let lastDateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "종료날짜 : "
+        
+        return label
+    }()
+    
+    let lastDateTF: UITextField = {
+        let textField = UITextField()
+        
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.placeholder = "여행 종료날짜를 선택해주세요"
+        
+        return textField
+    }()
     
     // MARK: - imageSlide
     func createSlides(_ images: [TLPHAsset]) -> [ImageSlide] {
@@ -142,6 +189,8 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
         saveButton.setImage(UIImage(named: "save"), for: .normal)
         saveButton.addTarget(self, action: #selector(saveButtonDidTap(_:)), for: .touchUpInside)
         
+        firstDateTF.delegate = self
+        lastDateTF.delegate = self
         textView.delegate = self
         textView.font = UIFont.italicSystemFont(ofSize: 20)
         textView.layer.cornerRadius = 10
@@ -162,6 +211,12 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
         scrollView.addSubview(textView)
         textView.addSubview(textViewLabel)
         
+        scrollView.addSubview(dateView)
+        dateView.addSubview(firstDateLabel)
+        dateView.addSubview(firstDateTF)
+        dateView.addSubview(lastDateLabel)
+        dateView.addSubview(lastDateTF)
+        
         imageTapEvent()
     }
     
@@ -177,6 +232,51 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
         textViewLabel.textColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
         textViewLabel.textAlignment = .center
         textViewLabel.isHidden = false
+    }
+    
+    func pickUpDate(_ textField : UITextField){
+        
+        // DatePicker
+        self.datePicker = UIDatePicker(frame:CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 216))
+        self.datePicker.backgroundColor = UIColor.white
+        self.datePicker.datePickerMode = .date
+        textField.inputView = self.datePicker
+        
+        // ToolBar
+        let toolBar = UIToolbar()
+        toolBar.barStyle = .default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor(red: 92/255, green: 216/255, blue: 255/255, alpha: 1)
+        toolBar.sizeToFit()
+        
+        // Adding Button ToolBar
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneClick))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelClick))
+        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        textField.inputAccessoryView = toolBar
+        
+    }
+    
+    @objc func doneClick() {
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateStyle = .medium
+        dateFormatter1.timeStyle = .none
+        if firstDateTF.isEditing {
+            firstDateTF.text = dateFormatter1.string(from: datePicker.date)
+            firstDateTF.resignFirstResponder()
+        } else {
+            lastDateTF.text = dateFormatter1.string(from: datePicker.date)
+            lastDateTF.resignFirstResponder()
+        }
+    }
+    @objc func cancelClick() {
+        if firstDateTF.isEditing {
+            firstDateTF.resignFirstResponder()
+        } else {
+            lastDateTF.resignFirstResponder()
+        }
     }
     
     private func configureNotificationForKeyboard() {
@@ -221,7 +321,7 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
         pageControl.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.topAnchor.constraint(equalTo: imageScrollView.bottomAnchor, constant: 10).isActive = true
+        textView.topAnchor.constraint(equalTo: dateView.bottomAnchor, constant: 10).isActive = true
         textView.centerXAnchor.constraint(equalTo: imageScrollView.centerXAnchor).isActive = true
         textView.widthAnchor.constraint(equalToConstant: 350).isActive = true
         textView.heightAnchor.constraint(equalToConstant: 600).isActive = true
@@ -232,6 +332,18 @@ class WriteViewController: UIViewController, UINavigationControllerDelegate, UII
         textViewLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         textViewLabel.heightAnchor.constraint(equalToConstant: 23).isActive = true
         
+        dateView.topAnchor.constraint(equalTo: imageScrollView.bottomAnchor, constant: 10).isActive = true
+        dateView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        dateView.widthAnchor.constraint(equalToConstant: 350).isActive = true
+        dateView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        firstDateLabel.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
+        firstDateLabel.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
+        firstDateTF.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
+        firstDateTF.leadingAnchor.constraint(equalTo: firstDateLabel.trailingAnchor, constant: 10).isActive = true
+        lastDateLabel.topAnchor.constraint(equalTo: firstDateLabel.bottomAnchor, constant: 10).isActive = true
+        lastDateLabel.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
+        lastDateTF.topAnchor.constraint(equalTo: firstDateTF.bottomAnchor, constant: 10).isActive = true
+        lastDateTF.leadingAnchor.constraint(equalTo: lastDateLabel.trailingAnchor, constant: 10).isActive = true
     }
     
     private func textViewLabelShow() {
@@ -308,5 +420,15 @@ extension WriteViewController: UITextViewDelegate {
         textViewLabelShow()
         
         return true
+    }
+}
+
+extension WriteViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if firstDateTF.isEditing {
+            self.pickUpDate(self.firstDateTF)
+        } else {
+            self.pickUpDate(self.lastDateTF)
+        }
     }
 }
