@@ -35,7 +35,7 @@ class WriteViewController: UIViewController {
     let firstDateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "시작날짜 : "
+        label.text = "여행시작 :"
         
         return label
     }()
@@ -44,7 +44,7 @@ class WriteViewController: UIViewController {
         let textField = UITextField()
         
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "여행 시작날짜를 선택해주세요"
+        textField.placeholder = "01 Jan 2019"
         
         return textField
     }()
@@ -52,7 +52,7 @@ class WriteViewController: UIViewController {
     let lastDateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "종료날짜 : "
+        label.text = "여행끝 :"
         
         return label
     }()
@@ -61,9 +61,25 @@ class WriteViewController: UIViewController {
         let textField = UITextField()
         
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "여행 종료날짜를 선택해주세요"
+        textField.placeholder = "01 Jan 2019"
         
         return textField
+    }()
+    
+    let locationTitle: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "여행지 :"
+        
+        return label
+    }()
+    
+    let location: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "여행지를 선택해주세요"
+        
+        return label
     }()
   
     var subject: String?
@@ -116,8 +132,14 @@ class WriteViewController: UIViewController {
         dateView.addSubview(firstDateTF)
         dateView.addSubview(lastDateLabel)
         dateView.addSubview(lastDateTF)
+        dateView.addSubview(locationTitle)
+        dateView.addSubview(location)
 
         textView.addSubview(textViewLabel)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapFunction(_:)))
+        location.addGestureRecognizer(tapGesture)
+        location.isUserInteractionEnabled = true
     }
     
     private func configureCustomKeyboard() {
@@ -249,15 +271,20 @@ class WriteViewController: UIViewController {
         dateView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 10).isActive = true
         dateView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         dateView.widthAnchor.constraint(equalToConstant: 350).isActive = true
-        dateView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        dateView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
         firstDateLabel.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
         firstDateLabel.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
         firstDateTF.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
         firstDateTF.leadingAnchor.constraint(equalTo: firstDateLabel.trailingAnchor, constant: 10).isActive = true
-        lastDateLabel.topAnchor.constraint(equalTo: firstDateLabel.bottomAnchor, constant: 10).isActive = true
-        lastDateLabel.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
-        lastDateTF.topAnchor.constraint(equalTo: firstDateTF.bottomAnchor, constant: 10).isActive = true
+        lastDateLabel.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
+        lastDateLabel.leadingAnchor.constraint(equalTo: firstDateTF.trailingAnchor, constant: 15).isActive = true
+        lastDateTF.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
         lastDateTF.leadingAnchor.constraint(equalTo: lastDateLabel.trailingAnchor, constant: 10).isActive = true
+        locationTitle.bottomAnchor.constraint(equalTo: dateView.bottomAnchor).isActive = true
+        locationTitle.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
+        location.bottomAnchor.constraint(equalTo: dateView.bottomAnchor).isActive = true
+        location.leadingAnchor.constraint(equalTo: locationTitle.trailingAnchor, constant: 10).isActive = true
     }
     
     private func textViewLabelShow() {
@@ -329,6 +356,11 @@ class WriteViewController: UIViewController {
     
     @objc private func keyboardWillHide(_ sender: Notification) {
         self.view.frame.origin.y = 0
+    }
+    
+    @objc func tapFunction(_ sender:UITapGestureRecognizer) {
+        let mapVC = MapViewController()
+        present(mapVC, animated: true)
     }
 
 }
