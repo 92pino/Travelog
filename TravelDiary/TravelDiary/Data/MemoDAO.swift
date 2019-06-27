@@ -41,6 +41,8 @@ class MemoDAO {
                 data.title = record.title
                 data.contents = record.contents
                 data.registerDate = record.registerdate! as Date
+                data.sDate = record.sDate! as Date
+                data.eDate = record.eDate! as Date
                 data.objectID = record.objectID
                 
                 // 이미지가 있을 때에만 복사
@@ -67,6 +69,8 @@ class MemoDAO {
         object.title = data.title
         object.contents = data.contents
         object.registerdate = data.registerDate!
+        object.sDate = data.sDate!
+        object.eDate = data.eDate!
         
         if let image = data.image {
             object.image = image.pngData()!

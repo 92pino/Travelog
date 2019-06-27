@@ -22,6 +22,8 @@ class DetailViewController: UIViewController {
     private let topNavigationView = UIView()
     private let backButton = UIButton()
     private let trashButton = UIButton()
+    private let sDateLabel = UILabel()
+    private let eDateLabel = UILabel()
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     lazy var dao = MemoDAO()
@@ -73,6 +75,8 @@ class DetailViewController: UIViewController {
         view.addSubview(topNavigationView)
         topNavigationView.addSubview(backButton)
         topNavigationView.addSubview(trashButton)
+        view.addSubview(sDateLabel)
+        view.addSubview(eDateLabel)
         view.addSubview(selectedImageView)
         view.addSubview(contents)
         view.addSubview(registerDateLabel)
