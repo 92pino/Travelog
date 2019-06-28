@@ -65,26 +65,27 @@ class DetailViewController: UIViewController {
         topLabel.textAlignment = .center
         topLabel.font = UIFont(name: "Snell Roundhand", size: 30)
         topLabel.textColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
-        
-        contents.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        contents.textColor = #colorLiteral(red: 0.2683359385, green: 0.3678353727, blue: 0.7584179044, alpha: 1)
+
+        contents.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        contents.textColor = .white
+
         contents.layer.cornerRadius = 10
         contents.layer.borderColor = #colorLiteral(red: 0.2142035365, green: 0.6806999445, blue: 0.986015141, alpha: 1)
         contents.layer.borderWidth = 0.5
         contents.clipsToBounds = true
-        contents.textAlignment = .center
+//        contents.textAlignment = .center
         contents.inputAccessoryView = toolBarKeyboard
         contents.text = "asdfasdfsdf"
         contents.isEditable = false
         
-        let bgImage = #imageLiteral(resourceName: "paperBg")
+        let bgImage = #imageLiteral(resourceName: "paperBg2")
         self.contents.backgroundColor = UIColor(patternImage: bgImage)
         contents.layer.borderWidth = 0
         contents.layer.borderColor = UIColor.clear.cgColor
         
-        let style = NSMutableParagraphStyle()
-        style.lineSpacing = 9
-        contents.attributedText = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.paragraphStyle: style])
+//        let style = NSMutableParagraphStyle()
+//        style.lineSpacing = 9
+//        contents.attributedText = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.paragraphStyle: style])
         
         registerDateLabel.font = UIFont.systemFont(ofSize: 20, weight: .light)
         registerDateLabel.textColor = #colorLiteral(red: 0.2683359385, green: 0.3678353727, blue: 0.7584179044, alpha: 1)
