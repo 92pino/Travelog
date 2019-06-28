@@ -12,6 +12,8 @@ class CustomTapBarController: UITabBarController {
     
     let tabBarItemQuantity = 3
     let backgroundView = UIView()
+    
+    let thirdTab = WriteViewController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +43,7 @@ class CustomTapBarController: UITabBarController {
         let secondTabBarItem = UITabBarItem(title: "My Log", image: UIImage(named: "mylogTap"), selectedImage: UIImage(named: "mylogTap"))
         secondTab.tabBarItem = secondTabBarItem
         
-        let thirdTab = WriteViewController()
+        
         let thridTabBarItem = UITabBarItem(title: "Write", image: UIImage(named: "writeTap"), selectedImage: UIImage(named: "writeTap"))
         thirdTab.tabBarItem = thridTabBarItem
         
