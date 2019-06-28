@@ -149,10 +149,10 @@ class MapViewController: UIViewController {
     }
     
     @objc func checkButtonEvent(_ sender: UIButton) {
-        guard let searchTextFieldTxt = textFiled.text else { return }
+        guard var searchTextFieldTxt = textFiled.text else { return }
+        
         dismiss(animated: true) {
             self.writeVC.location.text = searchTextFieldTxt
-            print(searchTextFieldTxt)
         }
     }
     
