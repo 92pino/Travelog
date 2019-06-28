@@ -11,7 +11,7 @@ import YPImagePicker
 import Photos
 
 class WriteViewController: UIViewController {
-    
+    var saveLocationText: String = "여행지를 선택해주세요"
     var datePicker : UIDatePicker!
     
     var sDate = Date()
@@ -77,9 +77,16 @@ class WriteViewController: UIViewController {
     let location: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "여행지를 선택해주세요"
         
         return label
+    }()
+    
+    let mapButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setBackgroundImage(#imageLiteral(resourceName: "imageviewdefault"), for: .normal)
+        
+        return button
     }()
   
     var subject: String?
@@ -136,10 +143,11 @@ class WriteViewController: UIViewController {
         dateView.addSubview(location)
 
         textView.addSubview(textViewLabel)
+        dateView.addSubview(mapButton)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapFunction(_:)))
-        location.addGestureRecognizer(tapGesture)
-        location.isUserInteractionEnabled = true
+        mapButton.addTarget(self, action: #selector(tapFunction(_:)), for: .touchUpInside)
+        
+        location.text = saveLocationText
     }
     
     private func configureCustomKeyboard() {
@@ -285,6 +293,11 @@ class WriteViewController: UIViewController {
         locationTitle.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
         location.bottomAnchor.constraint(equalTo: dateView.bottomAnchor).isActive = true
         location.leadingAnchor.constraint(equalTo: locationTitle.trailingAnchor, constant: 10).isActive = true
+        
+        mapButton.centerYAnchor.constraint(equalTo: location.centerYAnchor).isActive = true
+        mapButton.leadingAnchor.constraint(equalTo: location.trailingAnchor, constant: 10).isActive = true
+        mapButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        mapButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
     private func textViewLabelShow() {

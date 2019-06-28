@@ -11,7 +11,7 @@ import MapKit
 import UIKit
 
 class MapViewController: UIViewController {
-    let WriteVC = WriteViewController()
+    let writeVC = WriteViewController()
     
     let textFiled = UITextField()
     let removeButton = UIButton(type: .system)
@@ -150,8 +150,10 @@ class MapViewController: UIViewController {
     
     @objc func checkButtonEvent(_ sender: UIButton) {
         guard var searchTextFieldTxt = textFiled.text else { return }
-        WriteVC.locationTitle.text = searchTextFieldTxt
-        dismiss(animated: true)
+        
+        dismiss(animated: true) {
+            self.writeVC.location.text = searchTextFieldTxt
+        }
     }
     
     
