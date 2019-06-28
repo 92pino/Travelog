@@ -66,8 +66,9 @@ class DetailViewController: UIViewController {
         topLabel.font = UIFont(name: "Snell Roundhand", size: 30)
         topLabel.textColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
 
-        contents.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+//        contents.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         contents.textColor = .white
+        contents.font = UIFont(name: "Marker Felt", size: 20)
 
         contents.layer.cornerRadius = 10
         contents.layer.borderColor = #colorLiteral(red: 0.2142035365, green: 0.6806999445, blue: 0.986015141, alpha: 1)
