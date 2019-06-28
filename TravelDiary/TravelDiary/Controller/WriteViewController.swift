@@ -11,7 +11,7 @@ import YPImagePicker
 import Photos
 
 class WriteViewController: UIViewController {
-    var saveLocationText: String = "여행지를 선택해주세요"
+    
     var datePicker : UIDatePicker!
     
     var sDate = Date()
@@ -74,17 +74,19 @@ class WriteViewController: UIViewController {
         return label
     }()
     
+//    let location: UILabel()
     let location: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        
+        label.text = "여행지를 선택해주세요"
+
         return label
     }()
     
     let mapButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setBackgroundImage(#imageLiteral(resourceName: "imageviewdefault"), for: .normal)
+        button.setBackgroundImage(#imageLiteral(resourceName: "map"), for: .normal)
         
         return button
     }()
@@ -148,7 +150,7 @@ class WriteViewController: UIViewController {
         
         mapButton.addTarget(self, action: #selector(tapFunction(_:)), for: .touchUpInside)
         
-        location.text = saveLocationText
+        
     }
     
     private func configureCustomKeyboard() {
@@ -194,15 +196,6 @@ class WriteViewController: UIViewController {
         textField.inputAccessoryView = toolBar
         
     }
-    
-//    private func locationLabelInputText() {
-//        let mapView = MapViewController()
-//        if location.text?.isEmpty == true {
-//            location.text = "여행지를 선택해주세요"
-//        } else {
-//            location.text = mapView.textFiled.text
-//        }
-//    }
     
     @objc func doneClick() {
         let dateFormatter1 = DateFormatter()
@@ -301,6 +294,8 @@ class WriteViewController: UIViewController {
         lastDateTF.leadingAnchor.constraint(equalTo: lastDateLabel.trailingAnchor, constant: 10).isActive = true
         locationTitle.bottomAnchor.constraint(equalTo: dateView.bottomAnchor).isActive = true
         locationTitle.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
+        
+//        location.translatesAutoresizingMaskIntoConstraints = false
         location.bottomAnchor.constraint(equalTo: dateView.bottomAnchor).isActive = true
         location.leadingAnchor.constraint(equalTo: locationTitle.trailingAnchor, constant: 10).isActive = true
         
@@ -339,6 +334,7 @@ class WriteViewController: UIViewController {
         data.contents = self.textView.text
         data.image = self.selectedImageView.image
         data.registerDate = Date()
+        data.location = location.text
         data.sDate = sDate
         data.eDate = eDate
         
@@ -359,7 +355,7 @@ class WriteViewController: UIViewController {
             self.selectedImageView.image = items.singlePhoto?.image
             picker.dismiss(animated: false)
         }
-        present(picker, animated: false)
+        present(picker, animated: true)
     }
     
     @objc private func backButtonDidTap(_ sender: UIButton) {
@@ -382,6 +378,7 @@ class WriteViewController: UIViewController {
             self.textView.text = nil
             self.firstDateTF.text = nil
             self.lastDateTF.text = nil
+            self.location.text = "여행지를 선택해주세요"
         }
     }
     

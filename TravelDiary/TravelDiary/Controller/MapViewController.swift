@@ -11,7 +11,8 @@ import MapKit
 import UIKit
 
 class MapViewController: UIViewController {
-    let writeVC = WriteViewController()
+//    let writeVC = WriteViewController()
+    lazy var tempLocation = ""
     
     let textFiled = UITextField()
     let removeButton = UIButton(type: .system)
@@ -149,11 +150,11 @@ class MapViewController: UIViewController {
     }
     
     @objc func checkButtonEvent(_ sender: UIButton) {
-        guard var searchTextFieldTxt = textFiled.text else { return }
+        print("Hi1")
+        guard let vc = presentingViewController as? CustomTapBarController else {return print("Hi3")}
+        vc.thirdTab.location.text = self.textFiled.text!
         
-        dismiss(animated: true) {
-            self.writeVC.location.text = searchTextFieldTxt
-        }
+        presentingViewController?.dismiss(animated: true)
     }
     
     

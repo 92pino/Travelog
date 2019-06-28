@@ -164,8 +164,11 @@ class DetailViewController: UIViewController {
         lastDateLabel.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
         lastDateLabel.leadingAnchor.constraint(equalTo: toLabel.trailingAnchor, constant: 10).isActive = true
         
+        locationTitle.translatesAutoresizingMaskIntoConstraints = false
         locationTitle.bottomAnchor.constraint(equalTo: dateView.bottomAnchor).isActive = true
         locationTitle.leadingAnchor.constraint(equalTo: dateView.leadingAnchor).isActive = true
+        
+        location.translatesAutoresizingMaskIntoConstraints = false
         location.bottomAnchor.constraint(equalTo: dateView.bottomAnchor).isActive = true
         location.leadingAnchor.constraint(equalTo: locationTitle.trailingAnchor, constant: 10).isActive = true
     }
@@ -191,6 +194,8 @@ class DetailViewController: UIViewController {
         self.registerDateLabel.text = dateString
         self.firstDateLabel.text = startDate
         self.lastDateLabel.text = lastDate
+        
+        self.location.text = savedData?.location
     }
     
     @objc private func doneButtonClicked (_sender: Any) {
