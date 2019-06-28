@@ -150,11 +150,18 @@ class MapViewController: UIViewController {
     }
     
     @objc func checkButtonEvent(_ sender: UIButton) {
-        print("Hi1")
-        guard let vc = presentingViewController as? CustomTapBarController else {return print("Hi3")}
-        vc.thirdTab.location.text = self.textFiled.text!
-        
-        presentingViewController?.dismiss(animated: true)
+        guard let vc = presentingViewController as? CustomTapBarController else { return }
+        if !textFiled.text!.isEmpty {
+            vc.thirdTab.location.text = self.textFiled.text!
+            
+            presentingViewController?.dismiss(animated: true)
+        } else {
+            let alert = UIAlertController(title: "장소를 검색해주세요", message: nil, preferredStyle: .alert)
+            
+            // add an action (button)
+            alert.addAction(UIAlertAction(title: "확인", style: .default))
+            self.present(alert, animated: true)
+        }
     }
     
     
