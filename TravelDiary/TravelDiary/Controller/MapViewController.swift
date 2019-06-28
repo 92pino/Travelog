@@ -65,9 +65,9 @@ class MapViewController: UIViewController {
         mapView.mapType = .standard
         mapView.showsCompass = true
         
-        view.addSubview(textFiled)
         mapView.addSubview(removeButton)
         view.addSubview(mapView)
+        view.addSubview(textFiled)
         view.addSubview(dismissButton)
         view.addSubview(checkButton)
         
@@ -90,23 +90,23 @@ class MapViewController: UIViewController {
     
     func autoLayout() {
         dismissButton.centerYAnchor.constraint(equalTo: textFiled.centerYAnchor).isActive = true
-        dismissButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        dismissButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        dismissButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        dismissButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         dismissButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 5).isActive = true
         
         textFiled.translatesAutoresizingMaskIntoConstraints = false
         textFiled.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        textFiled.leadingAnchor.constraint(equalTo: dismissButton.trailingAnchor, constant: 5).isActive = true
-        textFiled.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        textFiled.leadingAnchor.constraint(equalTo: dismissButton.trailingAnchor, constant: 10).isActive = true
+        textFiled.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         checkButton.centerYAnchor.constraint(equalTo: textFiled.centerYAnchor).isActive = true
-        checkButton.leadingAnchor.constraint(equalTo: textFiled.trailingAnchor, constant: 5).isActive = true
+        checkButton.leadingAnchor.constraint(equalTo: textFiled.trailingAnchor, constant: 10).isActive = true
         checkButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -5).isActive = true
-        checkButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        checkButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        checkButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        checkButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         mapView.translatesAutoresizingMaskIntoConstraints = false
-        mapView.topAnchor.constraint(equalTo: textFiled.bottomAnchor).isActive = true
+        mapView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         mapView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         mapView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         mapView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
