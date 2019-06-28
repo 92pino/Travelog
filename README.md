@@ -13,7 +13,7 @@
 
 
 3. 최종 결과물 소개
-[Travelog](https://www.youtube.com/watch?v=Rzkk7k9iwK0&feature=share)
+[Travelog](https://www.youtube.com/watch?v=idh8UgCPofI)
 
 4. 기획 대비 완성률  /  개발 과정에서 초기 기획과 달라진 점
     1) 완성률: 70% / 100%
