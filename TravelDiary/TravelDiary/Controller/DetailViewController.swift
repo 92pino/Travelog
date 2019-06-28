@@ -22,6 +22,7 @@ class DetailViewController: UIViewController {
     private let topNavigationView = UIView()
     private let backButton = UIButton()
     private let trashButton = UIButton()
+    private let topLabel = UILabel()
     private let dateView = UIView()
     private let firstDateLabel = UILabel()
     private let fromLabel = UILabel()
@@ -59,6 +60,11 @@ class DetailViewController: UIViewController {
         
         trashButton.setImage(UIImage(named: "trash"), for: .normal)
         trashButton.addTarget(self, action: #selector(removeButtonDidTap(_:)), for: .touchUpInside)
+        
+        topLabel.text = "My travel log"
+        topLabel.textAlignment = .center
+        topLabel.font = UIFont(name: "Snell Roundhand", size: 30)
+        topLabel.textColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         
         contents.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         contents.textColor = #colorLiteral(red: 0.2683359385, green: 0.3678353727, blue: 0.7584179044, alpha: 1)
@@ -99,6 +105,7 @@ class DetailViewController: UIViewController {
         view.addSubview(topNavigationView)
         topNavigationView.addSubview(backButton)
         topNavigationView.addSubview(trashButton)
+        topNavigationView.addSubview(topLabel)
         view.addSubview(dateView)
         dateView.addSubview(firstDateLabel)
         dateView.addSubview(lastDateLabel)
@@ -133,6 +140,12 @@ class DetailViewController: UIViewController {
         trashButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         trashButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         trashButton.trailingAnchor.constraint(equalTo: topNavigationView.trailingAnchor, constant: -20).isActive = true
+        
+        topLabel.translatesAutoresizingMaskIntoConstraints = false
+        topLabel.centerYAnchor.constraint(equalTo: topNavigationView.safeAreaLayoutGuide.centerYAnchor).isActive = true
+        topLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor).isActive = true
+        topLabel.trailingAnchor.constraint(equalTo: trashButton.leadingAnchor).isActive = true
+        topLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         selectedImageView.translatesAutoresizingMaskIntoConstraints = false
         selectedImageView.topAnchor.constraint(equalTo: topNavigationView.bottomAnchor).isActive = true
