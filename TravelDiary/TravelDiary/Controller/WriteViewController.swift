@@ -345,6 +345,21 @@ class WriteViewController: UIViewController {
     
     @objc private func saveButtonDidTap(_ sender: UIButton) {
         saveUserInputData()
+        
+        // create the alert
+        let alert = UIAlertController(title: "포스팅 되었습니다.", message: nil, preferredStyle: .alert)
+        
+        // add an action (button)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
+            let tabbar = UIApplication.shared.keyWindow?.rootViewController as? UITabBarController
+            tabbar?.selectedIndex = 0
+        }))
+        self.present(alert, animated: true) {
+            self.selectedImageView.image = UIImage(named: "IU")
+            self.textView.text = nil
+            self.firstDateTF.text = nil
+            self.lastDateTF.text = nil
+        }
     }
     
     @objc private func doneButtonClicked (_sender: Any) {
