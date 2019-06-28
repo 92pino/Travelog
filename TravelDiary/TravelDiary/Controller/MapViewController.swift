@@ -11,6 +11,7 @@ import MapKit
 import UIKit
 
 class MapViewController: UIViewController {
+    let WriteVC = WriteViewController()
     
     let textFiled = UITextField()
     let removeButton = UIButton(type: .system)
@@ -24,7 +25,7 @@ class MapViewController: UIViewController {
     private let checkButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(#imageLiteral(resourceName: "backCus"), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "check"), for: .normal)
         
         return button
     }()
@@ -53,6 +54,9 @@ class MapViewController: UIViewController {
         textFiled.clearButtonMode = UITextField.ViewMode.always
         textFiled.enablesReturnKeyAutomatically = true
         textFiled.addTarget(self, action: #selector(textFieldShouldReturn(_:)), for: .editingDidEndOnExit)
+        
+        dismissButton.addTarget(self, action: #selector(dismissButtonEvent(_:)), for: .touchUpInside)
+        checkButton.addTarget(self, action: #selector(checkButtonEvent(_:)), for: .touchUpInside)
         
         removeButton.setTitle("Remove", for: .normal)
         removeButton.setTitleColor(#colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1), for: .normal)
@@ -138,6 +142,16 @@ class MapViewController: UIViewController {
         mapView.removeOverlays(mapView.overlays)
         mapView.removeAnnotations(mapView.annotations)
         exPoint = []
+    }
+    
+    @objc func dismissButtonEvent(_ sender: UIButton) {
+        self.dismiss(animated: true)
+    }
+    
+    @objc func checkButtonEvent(_ sender: UIButton) {
+        guard var searchTextFieldTxt = textFiled.text else { return }
+        WriteVC.locationTitle.text = searchTextFieldTxt
+        dismiss(animated: true)
     }
     
     
