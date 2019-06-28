@@ -127,6 +127,7 @@ class WriteViewController: UIViewController {
         textView.clipsToBounds = true
         
         configureTextViewLabel()
+//        locationLabelInputText()
         
         view.addSubview(topNavigationView)
         topNavigationView.addSubview(backButton)
@@ -193,6 +194,15 @@ class WriteViewController: UIViewController {
         textField.inputAccessoryView = toolBar
         
     }
+    
+//    private func locationLabelInputText() {
+//        let mapView = MapViewController()
+//        if location.text?.isEmpty == true {
+//            location.text = "여행지를 선택해주세요"
+//        } else {
+//            location.text = mapView.textFiled.text
+//        }
+//    }
     
     @objc func doneClick() {
         let dateFormatter1 = DateFormatter()
