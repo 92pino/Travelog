@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		61203C6A22C5258300C6D56E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61203C6922C5258300C6D56E /* MapViewController.swift */; };
+		61203C7022C5F38300C6D56E /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61203C6F22C5F38300C6D56E /* LaunchViewController.swift */; };
 		79871F1C403DA827EC42C76D /* Pods_TravelDiary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCB818DF83FB67B7EEC8D9B8 /* Pods_TravelDiary.framework */; };
 		F300FB7022C1C00100EDA9B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F300FB6F22C1C00100EDA9B0 /* AppDelegate.swift */; };
 		F300FB7222C1C00100EDA9B0 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F300FB7122C1C00100EDA9B0 /* MainViewController.swift */; };
@@ -33,6 +34,7 @@
 /* Begin PBXFileReference section */
 		52F8AEE44277C44DE7BD773B /* Pods-TravelDiary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelDiary.debug.xcconfig"; path = "Target Support Files/Pods-TravelDiary/Pods-TravelDiary.debug.xcconfig"; sourceTree = "<group>"; };
 		61203C6922C5258300C6D56E /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		61203C6F22C5F38300C6D56E /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		E80E526080885E81C06108D9 /* Pods-TravelDiary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelDiary.release.xcconfig"; path = "Target Support Files/Pods-TravelDiary/Pods-TravelDiary.release.xcconfig"; sourceTree = "<group>"; };
 		F300FB6C22C1C00100EDA9B0 /* TravelDiary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelDiary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F300FB6F22C1C00100EDA9B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				F300FB8B22C1FE3900EDA9B0 /* WriteViewController.swift */,
 				F3F4BCD722C49C3F005CA038 /* DetailViewController.swift */,
 				61203C6922C5258300C6D56E /* MapViewController.swift */,
+				61203C6F22C5F38300C6D56E /* LaunchViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				F300FB8C22C1FE3900EDA9B0 /* WriteViewController.swift in Sources */,
 				F3F4BCD622C48A19005CA038 /* MemoData.swift in Sources */,
 				F300FB7222C1C00100EDA9B0 /* MainViewController.swift in Sources */,
+				61203C7022C5F38300C6D56E /* LaunchViewController.swift in Sources */,
 				F3F4BCD422C486EA005CA038 /* MemoDAO.swift in Sources */,
 				F300FB7822C1C00100EDA9B0 /* TravelDiary.xcdatamodeld in Sources */,
 				F33F951222C5C934007F1722 /* Model.swift in Sources */,
