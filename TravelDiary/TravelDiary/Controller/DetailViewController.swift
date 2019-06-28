@@ -60,7 +60,7 @@ class DetailViewController: UIViewController {
         trashButton.setImage(UIImage(named: "trash"), for: .normal)
         trashButton.addTarget(self, action: #selector(removeButtonDidTap(_:)), for: .touchUpInside)
         
-        contents.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        contents.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         contents.textColor = #colorLiteral(red: 0.2683359385, green: 0.3678353727, blue: 0.7584179044, alpha: 1)
         contents.layer.cornerRadius = 10
         contents.layer.borderColor = #colorLiteral(red: 0.2142035365, green: 0.6806999445, blue: 0.986015141, alpha: 1)
@@ -69,6 +69,16 @@ class DetailViewController: UIViewController {
         contents.textAlignment = .center
         contents.inputAccessoryView = toolBarKeyboard
         contents.text = "asdfasdfsdf"
+        contents.isEditable = false
+        
+        let bgImage = #imageLiteral(resourceName: "paperBg")
+        self.contents.backgroundColor = UIColor(patternImage: bgImage)
+        contents.layer.borderWidth = 0
+        contents.layer.borderColor = UIColor.clear.cgColor
+        
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 9
+        contents.attributedText = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.paragraphStyle: style])
         
         registerDateLabel.font = UIFont.systemFont(ofSize: 20, weight: .light)
         registerDateLabel.textColor = #colorLiteral(red: 0.2683359385, green: 0.3678353727, blue: 0.7584179044, alpha: 1)
