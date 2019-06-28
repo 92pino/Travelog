@@ -20,9 +20,11 @@ class WriteViewController: UIViewController {
     private let topNavigationView = UIView()
     private let backButton = UIButton()
     private let saveButton = UIButton()
+    private let topLabel = UILabel()
     private let scrollView = UIScrollView()
     private let textView = UITextView()
     private let textViewLabel = UILabel()
+    private let infoImageViewLabel = UILabel()
     let selectedImageView = UIImageView()
     
     let dateView: UIView = {
@@ -74,7 +76,6 @@ class WriteViewController: UIViewController {
         return label
     }()
     
-//    let location: UILabel()
     let location: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -113,11 +114,21 @@ class WriteViewController: UIViewController {
         selectedImageView.isUserInteractionEnabled = true
         selectedImageView.addGestureRecognizer(imageTapGesture)
         
-        backButton.setImage(UIImage(named: "back"), for: .normal)
-        backButton.addTarget(self, action: #selector(backButtonDidTap(_:)), for: .touchUpInside)
+        infoImageViewLabel.text = "IU님 사진을 터치하시면 이미지를 넣을 수 있습니다."
+        infoImageViewLabel.textColor = #colorLiteral(red: 0.5004553199, green: 0.6069974899, blue: 1, alpha: 1)
+        infoImageViewLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        infoImageViewLabel.textAlignment = .center
+        
+        backButton.setImage(UIImage(named: "reset"), for: .normal)
+        backButton.addTarget(self, action: #selector(resetButtonDidTap(_:)), for: .touchUpInside)
         
         saveButton.setImage(UIImage(named: "save"), for: .normal)
         saveButton.addTarget(self, action: #selector(saveButtonDidTap(_:)), for: .touchUpInside)
+        
+        topLabel.text = "Write your travel log"
+        topLabel.textAlignment = .center
+        topLabel.font = UIFont(name: "Snell Roundhand", size: 30)
+        topLabel.textColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         
         firstDateTF.delegate = self
         lastDateTF.delegate = self
@@ -134,8 +145,10 @@ class WriteViewController: UIViewController {
         view.addSubview(topNavigationView)
         topNavigationView.addSubview(backButton)
         topNavigationView.addSubview(saveButton)
+        topNavigationView.addSubview(topLabel)
         view.addSubview(scrollView)
         scrollView.addSubview(selectedImageView)
+        selectedImageView.addSubview(infoImageViewLabel)
         scrollView.addSubview(textView)
         scrollView.addSubview(dateView)
         dateView.addSubview(firstDateLabel)
@@ -249,6 +262,12 @@ class WriteViewController: UIViewController {
         backButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backButton.leadingAnchor.constraint(equalTo: topNavigationView.leadingAnchor, constant: 20).isActive = true
         
+        topLabel.translatesAutoresizingMaskIntoConstraints = false
+        topLabel.centerYAnchor.constraint(equalTo: topNavigationView.safeAreaLayoutGuide.centerYAnchor).isActive = true
+        topLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor).isActive = true
+        topLabel.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor).isActive = true
+        topLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.centerYAnchor.constraint(equalTo: topNavigationView.safeAreaLayoutGuide.centerYAnchor).isActive = true
         saveButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
@@ -266,6 +285,12 @@ class WriteViewController: UIViewController {
         selectedImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         selectedImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         selectedImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.45).isActive = true
+        
+        infoImageViewLabel.translatesAutoresizingMaskIntoConstraints = false
+        infoImageViewLabel.topAnchor.constraint(equalTo: selectedImageView.topAnchor).isActive = true
+        infoImageViewLabel.leadingAnchor.constraint(equalTo: selectedImageView.leadingAnchor).isActive = true
+        infoImageViewLabel.trailingAnchor.constraint(equalTo: selectedImageView.trailingAnchor).isActive = true
+        infoImageViewLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.topAnchor.constraint(equalTo: dateView.bottomAnchor, constant: 10).isActive = true
@@ -313,6 +338,18 @@ class WriteViewController: UIViewController {
         }
     }
     
+    private func imageViewLabelDefault() {
+        infoImageViewLabel.text = "IU님 사진을 터치하시면 이미지를 넣을 수 있습니다."
+        infoImageViewLabel.textColor = #colorLiteral(red: 0.5004553199, green: 0.6069974899, blue: 1, alpha: 1)
+        infoImageViewLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        infoImageViewLabel.textAlignment = .center
+        infoImageViewLabel.isHidden = false
+    }
+    
+    private func imageViewLabelHidden() {
+        infoImageViewLabel.isHidden = true
+    }
+    
     private func saveUserInputData() {
         print("save")
         
@@ -353,13 +390,23 @@ class WriteViewController: UIViewController {
             
             self.selectedItems = items
             self.selectedImageView.image = items.singlePhoto?.image
-            picker.dismiss(animated: false)
+            picker.dismiss(animated: false) {
+                self.imageViewLabelHidden()
+            }
         }
-        present(picker, animated: true)
+        present(picker, animated: true) {
+            self.imageViewLabelDefault()
+        }
+        
     }
     
-    @objc private func backButtonDidTap(_ sender: UIButton) {
-        dismiss(animated: true)
+    @objc private func resetButtonDidTap(_ sender: UIButton) {
+        self.selectedImageView.image = UIImage(named: "IU")
+        self.textView.text = nil
+        self.firstDateTF.text = nil
+        self.lastDateTF.text = nil
+        self.location.text = "여행지를 선택해주세요"
+        infoImageViewLabel.isHidden = false
     }
     
     @objc private func saveButtonDidTap(_ sender: UIButton) {
